@@ -1,6 +1,5 @@
 #include QMK_KEYBOARD_H
 
-// Определяем пользовательский keycode
 enum custom_keycodes {
     M_CTRL_SHIFT_V = SAFE_RANGE,
     M_HIGLIGHT_ALL,
@@ -11,12 +10,10 @@ enum custom_keycodes {
     M_COPY_PAGE_URL,
     M_GO_TO_LINE, // Перейти к строке
     М_FIND_ALL, // Найти все
-    TOGGLE_SCROLL, // Переключить режим прокрутки
 };
 
 enum charybdis_keymap_layers {
     LAYER_BASE = 0,
-    LAYER_TEST,
     LAYER_LOWER,
     LAYER_RAISE,
     LAYER_FUN,
@@ -25,10 +22,8 @@ enum charybdis_keymap_layers {
     LAYER_POINTER,
 };
 
-bool scroll_held = false;
-
 // Layers
-#define TEST MO(LAYER_TEST)
+#define LOWER MO(LAYER_LOWER)
 #define LOWER MO(LAYER_LOWER)
 #define RAISE MO(LAYER_RAISE)
 #define FUN MO(LAYER_FUN)
@@ -41,12 +36,10 @@ bool scroll_held = false;
 // Short
 #define SC_NWIN LCTL(KC_N)
 #define SC_NTAB LCTL(KC_T)
-#define SC_CLOSE LCTL(KC_W) // todo
 #define DPI_UP POINTER_DEFAULT_DPI_FORWARD
 #define DPI_DOWN POINTER_DEFAULT_DPI_REVERSE
 #define SCROLL DRAGSCROLL_MODE
 
-// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
   // ╭───────────────────────────────────────────────────────────╮ ╭────────────────────────────────────────────────────────╮
@@ -56,11 +49,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├───────────────────────────────────────────────────────────┤ ├────────────────────────────────────────────────────────┤
        SC_LCPO,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,          KC_N,  KC_M, KC_COMM,  KC_DOT, ALT_T(KC_SLSH), KC_RBRC,
   // ╰───────────────────────────────────────────────────────────┤ ├────────────────────────────────────────────────────────╯
-              LWIN_T(KC_BSPC),  LT(LAYER_SYM, KC_SPC), MO(TEST),     LT(RAISE, KC_TAB),  LT(FUN, KC_ENT)
+              LWIN_T(KC_BSPC),  LT(LAYER_SYM, KC_SPC), MO(LOWER),     LT(RAISE, KC_TAB),  LT(FUN, KC_ENT)
   //         ╰───────────────────────────────────────────────────╯ ╰─────────────────────────────────────╯
   ),
 
-  [LAYER_TEST] = LAYOUT( // Тест для слоя LOWER под новую раскладку
+  [LAYER_LOWER] = LAYOUT(
   // ╭───────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        DPI_DOWN,  DPI_UP, XXXXXXX, XXXXXXX,  QK_BOOT, EE_CLR,      XXXXXXX, KC_7, KC_8, KC_9, XXXXXXX, XXXXXXX,
   // ├───────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
@@ -70,18 +63,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╰───────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, KC_ENT
   //                             ╰───────────────────────────╯ ╰──────────────────╯
-  ),
-
-  [LAYER_LOWER] = LAYOUT(
-  // ╭──────────────────────────────────────────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────╮
-       POINTER_DEFAULT_DPI_FORWARD, XXXXXXX, KC_WH_D, KC_WH_U, QK_BOOT, EE_CLR,                     KC_LBRC,  KC_7,  KC_8,  KC_9,  KC_RBRC,  XXXXXXX,
-  // ├──────────────────────────────────────────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────┤
-       POINTER_DEFAULT_DPI_REVERSE, DRAGSCROLL_MODE, KC_BTN4, KC_BTN5, M_COPY_WORD, M_GO_TO_LINE,   KC_EQL,  KC_4, KC_5,  KC_6, KC_MINS, KC_LSFT,
-  // ├──────────────────────────────────────────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────┤
-        KC_LCTL, KC_BTN1, KC_BTN2, KC_BTN3, SNIPING,  XXXXXXX,                                      KC_0,  KC_1,  KC_2,  KC_3,  KC_PSLS,  KC_LALT,
-  // ╰──────────────────────────────────────────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────╯
-                                                                      XXXXXXX, XXXXXXX, _______,      _______, KC_ENT
-  //                                                                ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
   [LAYER_RAISE] = LAYOUT(
@@ -102,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├─────────────────────────────────────────────────────────┤ ├────────────────────────────────────────────────────────┤
        XXXXXXX, C(KC_C), C(KC_V), C(KC_X), C(KC_A), М_FIND_ALL,    XXXXXXX, KC_F4, KC_F5, KC_F6, KC_F11, XXXXXXX,
   // ├─────────────────────────────────────────────────────────┤ ├────────────────────────────────────────────────────────┤
-       KC_LALT, A(KC_F4), C(KC_Z), C(S(KC_Z)),  C(S(KC_Z)),        XXXXXXX, XXXXXXX, KC_F1, KC_F2, KC_F3, KC_F10, XXXXXXX,
+       KC_LALT, A(KC_F4), C(KC_Z), C(S(KC_Z)),  C(S(KC_Z)),        XXXXXXX, KC_F1, KC_F2, KC_F3, KC_F4, KC_F10, XXXXXXX,
   // ╰─────────────────────────────────────────────────────────┤ ├────────────────────────────────────────────────────────╯
                                      XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, KC_BSPC
   //                               ╰───────────────────────────╯ ╰──────────────────╯
@@ -149,33 +130,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // COMBOS
 
-bool is_en_layout = true;
-
 enum combo_events {
   SWITCH_LANG,
 };
 
-const uint16_t PROGMEM CB_PRINT_SCREEN[] = {KC_S, KC_D, COMBO_END}; // todo
 const uint16_t PROGMEM CB_PASTE_WITHOUT_FROMATTING[] = {KC_X, KC_C, COMBO_END};
-const uint16_t PROGMEM CB_HIGLIGHT_ALL[] = {KC_COMM, KC_DOT, COMBO_END}; // todo
 const uint16_t PROGMEM CB_CAPS_WORD[] = {KC_C, KC_V, COMBO_END};
-const uint16_t PROGMEM CB_STOP_TRACK[] = {KC_MPRV, KC_MNXT, COMBO_END}; // todo
-const uint16_t PROGMEM CB_COMMA[] = {KC_N, KC_M, COMBO_END}; // todo
-const uint16_t PROGMEM CB_DOT[] = {KC_M, KC_COMMA, COMBO_END}; // todo
 const uint16_t PROGMEM CB_DASH[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM CB_SWITCH_LANG[] = {KC_K, KC_L, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(CB_PRINT_SCREEN, KC_PSCR),
-    COMBO(CB_PASTE_WITHOUT_FROMATTING, M_CTRL_SHIFT_V), // keycodes with modifiers are possible too!
-    COMBO(CB_HIGLIGHT_ALL, M_HIGLIGHT_ALL),
+    COMBO(CB_PASTE_WITHOUT_FROMATTING, M_CTRL_SHIFT_V),
     COMBO(CB_CAPS_WORD, CW_TOGG),
-    COMBO(CB_STOP_TRACK, KC_MPLY),
-    COMBO(CB_COMMA, M_SEND_COMMA),
-    COMBO(CB_DOT, KC_DOT),
     COMBO(CB_DASH, KC_MINS),
     [SWITCH_LANG] = COMBO_ACTION(CB_SWITCH_LANG),
 };
+
+bool is_en_layout = true;
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch(combo_index) {
@@ -225,23 +196,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_LSFT);
                 unregister_code(KC_S);
             }
-            break; 
-        case M_HIGLIGHT_ALL: 
-            if (record->event.pressed) {
-                tap_code(KC_HOME);
-                tap_code16(LSFT(KC_END));
-            }
-            break; 
+            break;
         case M_COPY_WORD: 
             if (record->event.pressed) {
                 tap_code(KC_BTN1);
                 tap_code(KC_BTN1);
                 tap_code16(C(KC_C));
-            }
-            break;
-        case M_SEND_COMMA:
-            if (record->event.pressed) { // to do
-                SEND_STRING(",");
             }
             break;
         case M_DOPLICATE_PAGE:
@@ -319,6 +279,7 @@ void matrix_scan_user(void) {
 layer_state_t layer_state_set_user(layer_state_t state) {
     charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
 
+    // Переключение раскладке на EN при переходе на слой SYM и возврат на RU, когда слой SYM отключается
     if (get_highest_layer(state) == LAYER_SYM) {
         if (!is_en_layout) {
             tap_code(KC_F14);
