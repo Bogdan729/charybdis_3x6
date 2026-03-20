@@ -1,4 +1,4 @@
-# Charybdis Nano (3x6)
+# Charybdis (3x6)
 
 An ergonomic keyboard with integrated trackball.
 
