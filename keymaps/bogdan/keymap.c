@@ -57,9 +57,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭───────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        DPI_DOWN,  DPI_UP, XXXXXXX, XXXXXXX,  QK_BOOT, EE_CLR,      XXXXXXX, KC_7, KC_8, KC_9, XXXXXXX, XXXXXXX,
   // ├───────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_CAPS, KC_LALT,  KC_LCTL, KC_LSFT, KC_TAB, XXXXXXX,        KC_EQL, KC_4, KC_5, KC_6, KC_MINS, XXXXXXX,
+       KC_CAPS, KC_LALT,  KC_LCTL, KC_LSFT, KC_TAB, M_GO_TO_LINE,        KC_EQL, KC_4, KC_5, KC_6, KC_MINS, XXXXXXX,
   // ├───────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       DRG_TOG, KC_BTN1, KC_BTN2, KC_BTN3, SNIPING, XXXXXXX,       KC_0, KC_1, KC_2, KC_3, XXXXXXX, XXXXXXX,
+       DRG_TOG, KC_BTN1, KC_BTN2, KC_BTN3, SNIPING, M_COPY_WORD,       KC_0, KC_1, KC_2, KC_3, XXXXXXX, XXXXXXX,
   // ╰───────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, KC_ENT
   //                             ╰───────────────────────────╯ ╰──────────────────╯
@@ -202,7 +202,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case M_COPY_WORD: 
             if (record->event.pressed) {
                 tap_code(KC_BTN1);
-                tap_code(KC_BTN1);
+                tap_code16(C(KC_LEFT));
+                tap_code16(C(S(KC_RIGHT)));
                 tap_code16(C(KC_C));
             }
             break;
