@@ -2,14 +2,13 @@
 
 enum custom_keycodes {
     M_CTRL_SHIFT_V = SAFE_RANGE,
-    M_HIGLIGHT_ALL,
     M_COPY_WORD,
     M_W_SHIFT_S, // Print screen
     M_SEND_COMMA,
     M_DOPLICATE_PAGE,
     M_COPY_PAGE_URL,
     M_GO_TO_LINE, // Перейти к строке
-    М_FIND_ALL, // Найти все
+    M_FIND_ALL, // Найти все
 };
 
 enum charybdis_keymap_layers {
@@ -23,7 +22,6 @@ enum charybdis_keymap_layers {
 };
 
 // Layers
-#define LOWER MO(LAYER_LOWER)
 #define LOWER MO(LAYER_LOWER)
 #define RAISE MO(LAYER_RAISE)
 #define FUN MO(LAYER_FUN)
@@ -81,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭─────────────────────────────────────────────────────────╮ ╭────────────────────────────────────────────────────────╮
        XXXXXXX, KC_DEL, KC_INS, XXXXXXX, XXXXXXX, XXXXXXX,            XXXXXXX, KC_F7, KC_F8, KC_F9, KC_F12, XXXXXXX,
   // ├─────────────────────────────────────────────────────────┤ ├────────────────────────────────────────────────────────┤
-       XXXXXXX, C(KC_C), C(KC_V), C(KC_X), C(KC_A), М_FIND_ALL,       XXXXXXX, KC_F4, KC_F5, KC_F6, KC_F11, XXXXXXX,
+       XXXXXXX, C(KC_C), C(KC_V), C(KC_X), C(KC_A), M_FIND_ALL,       XXXXXXX, KC_F4, KC_F5, KC_F6, KC_F11, XXXXXXX,
   // ├─────────────────────────────────────────────────────────┤ ├────────────────────────────────────────────────────────┤
        KC_LALT, A(KC_F4), C(KC_Z), C(S(KC_Z)), C(S(KC_Z)), XXXXXXX,   XXXXXXX, KC_F1, KC_F2, KC_F3, KC_F10, XXXXXXX,
   // ╰─────────────────────────────────────────────────────────┤ ├────────────────────────────────────────────────────────╯
@@ -141,11 +139,11 @@ const uint16_t PROGMEM CB_SWITCH_LANG[] = {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM CB_EQL[] = {KC_F, KC_D, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(CB_PASTE_WITHOUT_FROMATTING, LCS(KC_V)),
+    [SWITCH_LANG] = COMBO_ACTION(CB_SWITCH_LANG),
+    COMBO(CB_PASTE_WITHOUT_FROMATTING, M_CTRL_SHIFT_V),
     COMBO(CB_CAPS_WORD, CW_TOGG),
     COMBO(CB_DASH, KC_MINS),
     COMBO(CB_EQL, KC_EQL),
-    [SWITCH_LANG] = COMBO_ACTION(CB_SWITCH_LANG),
 };
 
 bool is_en_layout = true;
@@ -220,7 +218,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(KC_ESC);
             }
             break;
-        case М_FIND_ALL:
+        case M_FIND_ALL:
             if (record->event.pressed) {
                 register_code(KC_LCTL);
                 register_code(KC_LSFT);
